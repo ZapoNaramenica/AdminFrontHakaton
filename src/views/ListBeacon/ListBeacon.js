@@ -105,7 +105,7 @@ class ListBeacon extends Component {
                             <td>{one.unique_id}</td>
                             <td>{one.vehicle_name}</td>
                             <td>{one.trace}</td>
-                            <td>Novo polje</td>
+                            <td>{one.instructions}</td>
                             <td><Button size="sm" color="danger" onClick={()=>this.handleDelete(one.id)}>Obriši</Button></td>
                           </tr>)
                         :

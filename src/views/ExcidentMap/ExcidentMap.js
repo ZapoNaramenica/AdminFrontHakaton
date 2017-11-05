@@ -14,32 +14,28 @@ class ExcidentMap extends Component {
   constructor(props){
     super(props);
     this.state ={
-        markers:[
-            { lat: 44.7866, lng: 20.4489 },
-            { lat: 44.789, lng: 20.4491 },
-            { lat: 44.789, lng: 20.5 },
-            { lat: 44.789, lng: 20.51 }
-        ]
+        markers:[]
     }
   };
 
     handleGetAllMarkers(){
-      axios.get('http://192.168.100.100:8000/api/')
+      axios.get('http://192.168.100.100:8000/api/v1/accidents/')
           .then((response) => {
               this.setState(()=>{
                   return ({
                       markers : response.data
                   })
               });
+              console.log(response.data)
           })
           .catch((error) => {
               console.log(error)
           });
   }
 
-  // componentDidMount(){
-  //   this.handleGetAllMarkers();
-  // }
+  componentDidMount(){
+    this.handleGetAllMarkers();
+  }
 
   render() {
       const MapWithAMarkerClusterer = compose(
@@ -53,7 +49,6 @@ class ExcidentMap extends Component {
               onMarkerClustererClick: () => (markerClusterer) => {
                   const clickedMarkers = markerClusterer.getMarkers()
                   console.log(`Current clicked markers length: ${clickedMarkers.length}`)
-                  console.log(clickedMarkers)
               },
           }),
           withScriptjs,
@@ -71,7 +66,7 @@ class ExcidentMap extends Component {
               >
                   {this.state.markers.map(marker => (
                       <Marker
-                          key={marker.lat}
+                          key={marker.id}
                           position={{ lat: marker.lat, lng: marker.lng }}
                       />
                   ))}

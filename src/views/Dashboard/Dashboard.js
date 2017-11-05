@@ -1,7 +1,30 @@
 import React, { Component } from 'react';
 import {Row, Col, Card, CardFooter, CardBody, CardHeader} from 'reactstrap';
+import api from '../../utils/api';
 
 class Dashboard extends Component {
+
+  constructor(props){
+    super(props);
+    this.state={
+      numberOfBuses : 0
+    };
+  }
+
+    handleGetAllBuses(){
+        api.getAllBuses()
+            .then((response) => {
+                this.setState(()=>{
+                    return ({
+                        numberOfBuses: response.length
+                    })
+                })
+            })
+    }
+
+    componentDidMount(){
+      this.handleGetAllBuses();
+    }
 
   render() {
     return (
@@ -13,7 +36,7 @@ class Dashboard extends Component {
                 Trenutno autobusa
               </CardHeader>
               <CardBody className="text-center">
-                55
+                  {this.state.numberOfBuses ? this.state.numberOfBuses : null}
               </CardBody>
             </Card>
           </Col>
@@ -30,10 +53,10 @@ class Dashboard extends Component {
           <Col xs="12" sm="6" md="4">
             <Card>
               <CardHeader>
-                Ukupno analiziranih problema
+                Ukupno saobraćajnih nesreća ovegodine
               </CardHeader>
               <CardBody className="text-center">
-                732
+                15000
               </CardBody>
             </Card>
           </Col>
