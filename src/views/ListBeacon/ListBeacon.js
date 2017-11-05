@@ -93,7 +93,7 @@ class ListBeacon extends Component {
                     <th>Broj Linije</th>
                     <th>Trasa linije</th>
                     <th>Novo polje</th>
-                    <th>Akcije</th>
+                    <th>Instrukcije</th>
                   </tr>
                   </thead>
                   <tbody>
