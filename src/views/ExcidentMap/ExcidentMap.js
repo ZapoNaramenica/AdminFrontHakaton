@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {Badge, Row, Col} from 'reactstrap';
+const { compose, withProps, withHandlers } = require("recompose");
 import {
     withGoogleMap,
     GoogleMap,
     Marker,
+    withScriptjs,
 } from "react-google-maps";
 
-class ExcidentMap extends Component {
+const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
 
+class ExcidentMap extends Component {
   constructor(props){
     super(props);
     this.state ={
         markers:[
             { lat: 44.7866, lng: 20.4489 },
-            { lat: 44.789, lng: 20.4491 }
+            { lat: 44.789, lng: 20.4491 },
+            { lat: 44.789, lng: 20.5 },
+            { lat: 44.789, lng: 20.51 }
         ]
     }
   };
@@ -38,34 +42,46 @@ class ExcidentMap extends Component {
   // }
 
   render() {
-      const MapWithAMarker = withGoogleMap(props =>
+      const MapWithAMarkerClusterer = compose(
+          withProps({
+              googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyBx_NeMo8_IQJAGO5YZkKa5pY2k1f9cGUc",
+              loadingElement: <div style={{ height: `100%` }} />,
+              containerElement: <div style={{ height: `600px` }} />,
+              mapElement: <div style={{ height: `100%` }} />,
+          }),
+          withHandlers({
+              onMarkerClustererClick: () => (markerClusterer) => {
+                  const clickedMarkers = markerClusterer.getMarkers()
+                  console.log(`Current clicked markers length: ${clickedMarkers.length}`)
+                  console.log(clickedMarkers)
+              },
+          }),
+          withScriptjs,
+          withGoogleMap
+      )(props =>
           <GoogleMap
               defaultZoom={12}
               defaultCenter={{ lat: 44.7866, lng: 20.4489 }}
           >
-              {
-                  this.state.markers.length > 0 ?
-                      this.state.markers.map((marker, id)=>
-                          <Marker key={id} position={marker}/>
-                      )
-                      :
-                      null
-              }
+              <MarkerClusterer
+                  onClick={props.onMarkerClustererClick}
+                  averageCenter
+                  enableRetinaIcons
+                  gridSize={60}
+              >
+                  {this.state.markers.map(marker => (
+                      <Marker
+                          key={marker.lat}
+                          position={{ lat: marker.lat, lng: marker.lng }}
+                      />
+                  ))}
+              </MarkerClusterer>
           </GoogleMap>
       );
-    return (
-      <div className="animated fadeIn">
-        <Row>
-          <Col xs="12">
-              <MapWithAMarker
-                  containerElement={<div style={{ height: `400px` }} />}
-                  mapElement={<div style={{ height: `100%` }} />}
-              />
-          </Col>
-        </Row>
-      </div>
-    )
+
+      return (
+          <MapWithAMarkerClusterer/>
+      )
   }
 }
-
 export default ExcidentMap;
