@@ -56,7 +56,7 @@ class Dashboard extends Component {
                 Ukupno saobraćajnih nesreća ovegodine
               </CardHeader>
               <CardBody className="text-center">
-                15000
+                11243
               </CardBody>
             </Card>
           </Col>
